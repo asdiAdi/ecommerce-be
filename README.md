@@ -32,6 +32,19 @@
 $ npm install
 ```
 
+## Add .env data
+
+```bash
+NODE_ENV=
+
+JWT_SECRET=
+PGHOST=
+PGPORT=
+PGUSER=
+PGPASSWORD=
+PGDATABASE=
+```
+
 ## Compile and run the project
 
 ```bash
