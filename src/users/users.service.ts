@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
@@ -30,7 +30,7 @@ export class UsersService {
     return await this.usersRepository.findBy({ username });
   }
 
-  async findOneById(id: number) {
+  async findOneById(id: string) {
     return await this.usersRepository.findOne({ where: { id } });
   }
 }

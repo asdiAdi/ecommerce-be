@@ -2,36 +2,46 @@ import {
   IsDate,
   IsEmail,
   IsOptional,
-  IsPositive,
-  IsString,
+  IsUUID,
   Length,
+  MaxLength,
 } from 'class-validator';
+import { Exclude, Expose } from 'class-transformer';
 
+@Exclude()
 export class UserDataDto {
-  @IsPositive()
-  id: number;
+  @IsUUID()
+  id: string;
 
-  @IsString()
+  @Expose()
   @Length(4, 16)
-  username: string;
+  username: string; // TODO: prevent user from sending blank spaces eg "user name"
 
-  @IsString()
   @Length(8, 16)
-  // @IsStrongPassword()
   password: string;
 
+  @Expose()
   @IsOptional()
-  @IsString()
+  @MaxLength(255)
+  avatar?: string;
+
+  @Expose()
+  @IsOptional()
+  @MaxLength(255)
   name?: string;
 
+  @Expose()
   @IsOptional()
   @IsEmail()
+  @MaxLength(255)
   email?: string;
 
+  @Expose()
   @IsOptional()
-  @IsString()
+  @MaxLength(255)
   phone?: string;
 
+  @Expose()
   @IsOptional()
   @IsDate()
   birthdate?: Date;

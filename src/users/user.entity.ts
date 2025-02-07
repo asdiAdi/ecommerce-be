@@ -8,12 +8,14 @@ import {
 
 @Entity({ name: 'users' })
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
-  @Column({ type: 'varchar', length: 16, unique: true, nullable: false })
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+  @Column({ type: 'varchar', length: 20, unique: true, nullable: false })
   username: string;
   @Column({ type: 'varchar', length: 255, nullable: false }) //hashed
   password: string;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  avatar: string;
   @Column({ type: 'varchar', length: 255, nullable: true })
   name: string;
   @Column({ type: 'varchar', length: 255, unique: true, nullable: true })
@@ -22,8 +24,8 @@ export class User {
   phone: string;
   @Column({ type: 'date', nullable: true })
   birthdate: Date;
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   created_at: Date;
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   updated_at: Date;
 }
