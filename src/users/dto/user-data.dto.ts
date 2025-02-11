@@ -2,8 +2,10 @@ import {
   IsDate,
   IsEmail,
   IsOptional,
+  IsStrongPassword,
   IsUUID,
   Length,
+  Matches,
   MaxLength,
 } from 'class-validator';
 import { Exclude, Expose } from 'class-transformer';
@@ -15,9 +17,23 @@ export class UserDataDto {
 
   @Expose()
   @Length(4, 16)
-  username: string; // TODO: prevent user from sending blank spaces eg "user name"
+  @Matches(/^\S+$/, { message: 'Username must not contain spaces' })
+  username: string;
 
+  // minLength: 8
+  // minLowercase: 1
+  // minUppercase: 1
+  // minNumbers: 1
+  // minSymbols: 1
+  // returnScore: false
+  // pointsPerUnique: 1
+  // pointsPerRepeat: 0.5
+  // pointsForContainingLower: 10
+  // pointsForContainingUpper: 10
+  // pointsForContainingNumber: 10
+  // pointsForContainingSymbol: 10
   @Length(8, 16)
+  @IsStrongPassword()
   password: string;
 
   @Expose()
