@@ -15,7 +15,7 @@ CREATE TABLE users (
 
 CREATE TABLE addresses (
     id uuid DEFAULT gen_random_uuid() primary key,
-    user_id uuid REFERENCES users,
+    user_id uuid REFERENCES users ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     address_line_1 VARCHAR(255) NOT NULL,
     address_line_2 VARCHAR(255),

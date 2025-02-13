@@ -3,9 +3,9 @@ import { Controller } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { AuthTokenDto } from './dto/auth-token.dto';
-import { PlainToClass } from '../utils/interceptors/plainToClass.interceptor';
+import { PlainToInstance } from '../utils/interceptors/PlainToInstance.interceptor';
 
-@PlainToClass(AuthTokenDto)
+@PlainToInstance(AuthTokenDto)
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}

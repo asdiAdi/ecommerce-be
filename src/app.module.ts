@@ -20,6 +20,7 @@ import { AddressesModule } from './addresses/addresses.module';
   imports: [
     AuthModule,
     UsersModule,
+    AddressesModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
       isGlobal: true,
@@ -40,7 +41,6 @@ import { AddressesModule } from './addresses/addresses.module';
         limit: 20,
       },
     ]),
-    AddressesModule,
   ],
 
   providers: [

@@ -6,11 +6,13 @@ import {
   IsUUID,
   MaxLength,
 } from 'class-validator';
+import { Exclude } from 'class-transformer';
 
 export class AddressDataDto {
   @IsUUID()
   id: string;
 
+  @Exclude()
   @IsNotEmpty()
   @IsString()
   user_id: string;
@@ -51,9 +53,11 @@ export class AddressDataDto {
   @IsString()
   description: string;
 
+  @Exclude()
   @IsDate()
   created_at: Date;
 
+  @Exclude()
   @IsDate()
   updated_at: Date;
 }
