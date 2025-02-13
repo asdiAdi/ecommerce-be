@@ -4,7 +4,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
+import { User } from '../users/user.entity';
 
 @Entity({ name: 'addresses' })
 export class Address {
@@ -34,4 +36,7 @@ export class Address {
   created_at: Date;
   @UpdateDateColumn({ type: 'timestamptz' })
   updated_at: Date;
+
+  @ManyToOne(() => User, (user) => user.addresses)
+  user: User;
 }

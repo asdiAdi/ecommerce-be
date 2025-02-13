@@ -1,12 +1,23 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { AddressesService } from './addresses.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { PlainToInstance } from '../utils/interceptors/PlainToInstance.interceptor';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { AddressDataDto } from './dto/address-data.dto';
-import { MetaQueryDto } from '../utils/dto/meta-query.dto';
 import { UserToken } from '../utils/decorators/UserToken.decorator';
 import { AddressQueryDto } from './dto/address-query.dto';
+import { UpdateAddressDto } from './dto/update-address.dto';
 
 @Controller()
 @UseGuards(JwtAuthGuard)
@@ -15,7 +26,7 @@ export class AddressesController {
   constructor(private readonly addressesService: AddressesService) {}
 
   @Post('address')
-  async createAddress(
+  async postAddress(
     @UserToken('id') id: string,
     @Body() createAddressDto: CreateAddressDto,
   ) {
@@ -27,15 +38,24 @@ export class AddressesController {
   async getAddresses(
     @UserToken('id') id: string,
     @Query() query: AddressQueryDto,
-    @Query() metaQueryDto: MetaQueryDto,
   ) {
-    return await this.addressesService.findAllByUserId(id, query, metaQueryDto);
+    return await this.addressesService.findAllByUserId(id, query);
   }
 
-  // @Get('addresses/:id')
+  @Put('address/:addressId')
+  async putAddress(
+    @UserToken('id') userId: string,
+    @Param('addressId', ParseUUIDPipe) id: string,
+    @Body() updateAddressDto: UpdateAddressDto,
+  ) {
+    return await this.addressesService.updateById(userId, id, updateAddressDto);
+  }
 
-  // @Get('address/:addressId')
-  // async putAddress(@Body() userTokenDto: UserTokenDto) {
-  //   await this.addressesService.findAllByUserId(userTokenDto.id);
-  // }
+  @Delete('address/:addressId')
+  async deleteAddress(
+    @UserToken('id') userId: string,
+    @Param('addressId', ParseUUIDPipe) id: string,
+  ) {
+    return await this.addressesService.deleteById(userId, id);
+  }
 }

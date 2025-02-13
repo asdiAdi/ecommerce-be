@@ -7,7 +7,6 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { plainToInstance } from 'class-transformer';
-import { MetaDataDto } from '../dto/meta-data.dto';
 
 // from https://gist.github.com/ibayazit/dee57afc274297490e7265bcf4da63ab
 export function PlainToInstance(dto: ClassConstructor) {
@@ -28,7 +27,7 @@ export class PlainToInstanceInterceptor implements NestInterceptor {
         ) {
           return {
             data: plainToInstance(this.dto, data.data),
-            meta: plainToInstance(MetaDataDto, data.meta),
+            meta: plainToInstance(this.dto, data.meta),
           };
         } else {
           return plainToInstance(this.dto, data);

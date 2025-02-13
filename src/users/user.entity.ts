@@ -4,7 +4,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Address } from '../addresses/address.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -28,4 +30,7 @@ export class User {
   created_at: Date;
   @UpdateDateColumn({ type: 'timestamptz' })
   updated_at: Date;
+
+  @OneToMany(() => Address, (order) => order.user)
+  addresses: Address[];
 }

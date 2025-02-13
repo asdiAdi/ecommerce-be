@@ -5,8 +5,6 @@ import { Repository } from 'typeorm';
 import { UpdateAddressDto } from './dto/update-address.dto';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { AddressQueryDto } from './dto/address-query.dto';
-import { MetaQueryDto } from '../utils/dto/meta-query.dto';
-import { getMetaData } from '../utils/common';
 
 @Injectable()
 export class AddressesService {
@@ -28,48 +26,26 @@ export class AddressesService {
     return await this.addressesRepository.findOneBy({ id });
   }
 
-  // add these overloads if I want to support both paginated and non-paginated data
-  async findAllByUserId(
-    id: string,
-    addressQuery: AddressQueryDto,
-  ): Promise<Address[]>;
-  // overload
-  async findAllByUserId(
-    id: string,
-    addressQuery: AddressQueryDto,
-    metaQuery: MetaQueryDto,
-  ): Promise<{ data: Address[]; meta: MetaData }>;
-  async findAllByUserId(
-    id: string,
-    addressQuery: AddressQueryDto,
-    metaQuery?: MetaQueryDto,
-  ) {
-    if (metaQuery) {
-      const [data, count] = await this.addressesRepository.findAndCount({
-        where: { user_id: id, ...addressQuery.queries },
-        take: metaQuery.limit,
-        skip: metaQuery.offset,
-        order: {
-          [metaQuery.order_by ?? 'created_at']: metaQuery.order,
-        },
-      });
+  async findAllByUserId(id: string, addressQuery: AddressQueryDto) {
+    const [data, count] = await this.addressesRepository.findAndCount({
+      where: { user_id: id, ...addressQuery.queries },
+      take: addressQuery.limit,
+      skip: addressQuery.skip,
+      order: {
+        [addressQuery.order_by]: addressQuery.order,
+      },
+    });
 
-      const meta = getMetaData(metaQuery, count);
-      console.log({ metaQuery }, count);
-
-      return { data, meta, ...addressQuery.queries };
-    } else {
-      return await this.addressesRepository.find({
-        where: { user_id: id },
-      });
-    }
+    const meta = addressQuery.getMetadata(count);
+    return { data, meta };
   }
 
-  async updateById(id: string, payload: UpdateAddressDto) {
-    return await this.addressesRepository.update(id, payload);
+  async updateById(userId: string, id: string, payload: UpdateAddressDto) {
+    await this.addressesRepository.update({ user_id: userId, id: id }, payload);
+    return true;
   }
 
-  async deleteById(id: string) {
-    return await this.addressesRepository.delete(id);
+  async deleteById(userId: string, id: string) {
+    return await this.addressesRepository.delete({ user_id: userId, id: id });
   }
 }

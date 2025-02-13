@@ -5,29 +5,40 @@ import { Order, OrderBy } from '../../config/enums';
 export class MetaQueryDto {
   @IsEnum(Order)
   @IsOptional()
-  readonly order?: Order = Order.ASC;
+  readonly order: Order = Order.ASC;
 
   @IsString()
   @IsOptional()
   @IsEnum(OrderBy)
-  readonly order_by?: OrderBy = OrderBy.created_at;
+  readonly order_by: string = OrderBy.created_at;
 
   @Type(() => Number)
   @IsInt()
-  @Min(1)
+  @Min(0)
   @IsOptional()
-  readonly offset?: number = 1;
+  readonly offset: number = 0;
 
   @Type(() => Number)
   @IsInt()
   @Min(1)
   @Max(500)
   @IsOptional()
-  readonly limit?: number = 10;
+  readonly limit: number = 10;
 
-  // @Type(() => Number)
-  // @IsInt()
-  // @Min(1)
-  // @IsOptional()
-  // readonly total_pages?: number = 1;
+  // getters
+  get skip(): number {
+    return this.offset * this.limit;
+  }
+
+  // functions
+  getMetadata(count: number): MetaData {
+    return {
+      total_pages: Math.ceil(count / this.limit),
+      total_rows: count,
+      order: this.order,
+      order_by: this.order_by,
+      limit: this.limit,
+      offset: this.offset,
+    };
+  }
 }

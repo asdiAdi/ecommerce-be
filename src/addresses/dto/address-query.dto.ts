@@ -1,17 +1,35 @@
-import { IsOptional, IsString } from 'class-validator';
-import { AddressDataDto } from './address-data.dto';
-import { Exclude, Expose } from 'class-transformer';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { Address } from '../address.entity';
-import { FindOptionsWhere } from 'typeorm';
+import { FindOptionsWhere, ILike } from 'typeorm';
 import { MetaQueryDto } from '../../utils/dto/meta-query.dto';
+import { OrderBy } from '../../config/enums';
 
-// describe all available queries
+enum AddressOrderBy {
+  name = 'name',
+}
+
+// enum AddressSearchBy {
+//   city = 'city',
+// }
+
 export class AddressQueryDto extends MetaQueryDto {
   @IsString()
   @IsOptional()
   search: string;
 
+  // TODO: try to support search by AddressSearchBy enum
+  // @IsString()
+  // @IsOptional()
+  // search_by?: string;
+
+  @IsString()
+  @IsOptional()
+  @IsEnum({ ...OrderBy, ...AddressOrderBy })
+  order_by: OrderBy | AddressOrderBy;
+
   get queries(): FindOptionsWhere<Address> {
-    return { name: this.search };
+    return {
+      ...(this.search && { name: ILike(`%${this.search}%`) }),
+    };
   }
 }

@@ -7,7 +7,6 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { getValidationErrorResponse } from './utils/setup';
-import { MedaDataInterceptor } from './utils/interceptors/metaData.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
