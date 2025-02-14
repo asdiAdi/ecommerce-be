@@ -88,3 +88,24 @@ ALTER TABLE categories ALTER updated_at DROP default;
 -- display max length and their value
 SELECT title, length(title) as name_length from amazon
 where length(title) = (select max(length(title)) from amazon)
+
+-- one to many with users
+CREATE TABLE orders (
+    id uuid DEFAULT gen_random_uuid() primary key,
+    user_id uuid NOT NULL,
+    total_amount DECIMAL(10,2) NOT NULL CHECK (total_amount >= 0),
+    status VARCHAR(50) DEFAULT 'pending',
+    order_date timestamptz,
+    created_at timestamptz, -- also means order_date
+    updated_at timestamptz,
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+)
+
+CREATE TABLE orders (
+    order_id SERIAL PRIMARY KEY,
+    customer_id INT NOT NULL,
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    total_amount DECIMAL(10,2) NOT NULL CHECK (total_amount >= 0),
+    status VARCHAR(50) DEFAULT 'pending',
+    CONSTRAINT fk_customer FOREIGN KEY (customer_id) REFERENCES customers(customer_id) ON DELETE CASCADE
+);

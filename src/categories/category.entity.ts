@@ -7,7 +7,7 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { Product } from '../../products/product.entity';
+import { Product } from '../products/product.entity';
 
 // TODO: add Categories CRUD when making admin site
 @Entity({ name: 'categories' })
