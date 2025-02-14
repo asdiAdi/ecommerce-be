@@ -31,6 +31,6 @@ export class User {
   @UpdateDateColumn({ type: 'timestamptz' })
   updated_at: Date;
 
-  @OneToMany(() => Address, (order) => order.user)
+  @OneToMany(() => Address, (address) => address.user)
   addresses: Address[];
 }

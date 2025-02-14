@@ -15,12 +15,14 @@ import {
   PGUSER,
 } from './config';
 import { AddressesModule } from './addresses/addresses.module';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
     AuthModule,
     UsersModule,
     AddressesModule,
+    ProductsModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
       isGlobal: true,
