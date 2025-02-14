@@ -7,7 +7,6 @@ export class MetaQueryDto {
   @IsOptional()
   readonly order: Order = Order.ASC;
 
-  @IsString()
   @IsOptional()
   @IsEnum(OrderBy)
   readonly order_by: string = OrderBy.created_at;

@@ -5,6 +5,7 @@ import {
   UpdateDateColumn,
   PrimaryColumn,
   ManyToOne,
+  Index,
 } from 'typeorm';
 import { Category } from '../categories/category.entity';
 
@@ -12,6 +13,7 @@ import { Category } from '../categories/category.entity';
 export class Product {
   @PrimaryColumn('varchar', { length: 10 })
   asin: string;
+  @Index('idx_title', { synchronize: false })
   @Column({ type: 'text' })
   title: string;
   @Column({ type: 'text', nullable: true })

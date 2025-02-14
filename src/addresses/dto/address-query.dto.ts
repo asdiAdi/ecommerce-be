@@ -22,8 +22,6 @@ export class AddressQueryDto extends MetaQueryDto {
   // @IsOptional()
   // search_by?: string;
 
-  @IsString()
-  @IsOptional()
   @IsEnum({ ...OrderBy, ...AddressOrderBy })
   order_by: OrderBy | AddressOrderBy;
 
