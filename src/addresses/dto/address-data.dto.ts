@@ -27,7 +27,7 @@ export class AddressDataDto {
 
   @IsOptional()
   @MaxLength(255)
-  address_line_2: string;
+  address_line_2?: string;
 
   @IsNotEmpty()
   @MaxLength(255)
@@ -51,7 +51,7 @@ export class AddressDataDto {
 
   @IsOptional()
   @IsString()
-  description: string;
+  description?: string;
 
   @Exclude()
   @IsDate()
