@@ -17,6 +17,7 @@ import {
 import { AddressesModule } from './addresses/addresses.module';
 import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
+import { CartsModule } from './carts/carts.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { CategoriesModule } from './categories/categories.module';
     AddressesModule,
     ProductsModule,
     CategoriesModule,
+    CartsModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
       isGlobal: true,

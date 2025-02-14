@@ -13,6 +13,7 @@ CREATE TABLE users (
     updated_at timestamptz
 );
 
+-- TODO: add type (business/home address), isDefault
 CREATE TABLE addresses (
     id uuid DEFAULT gen_random_uuid() primary key,
     user_id uuid REFERENCES users ON DELETE CASCADE,
@@ -88,6 +89,26 @@ ALTER TABLE categories ALTER updated_at DROP default;
 -- display max length and their value
 SELECT title, length(title) as name_length from amazon
 where length(title) = (select max(length(title)) from amazon)
+
+
+-- Orders and Cart
+CREATE TABLE carts (
+    id uuid DEFAULT gen_random_uuid() primary key,
+    user_id uuid NOT NULL,
+    created_at timestamptz,
+    updated_at timestamptz,
+    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE cart_items (
+    cart_id uuid NOT NULL,
+    product_id uuid NOT NULL,
+    quantity INTEGER NOT NULL,
+    PRIMARY KEY (cart_id, product_id),
+    CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES carts(id) ON DELETE CASCADE,
+    CONSTRAINT fk_product_id FOREIGN KEY (product_id) REFERENCES products(asin) ON DELETE CASCADE
+    CONSTRAINT chk_quantity CHECK (quantity > 0) -- add checking on nest to delete the item when quantity is zero
+);
 
 -- one to many with users
 CREATE TABLE orders (

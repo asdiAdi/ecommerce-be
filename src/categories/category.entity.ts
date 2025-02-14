@@ -31,9 +31,13 @@ export class Category {
   parent: Category;
 
   // One category can have multiple subcategories
-  @OneToMany(() => Category, (category) => category.parent)
+  @OneToMany(() => Category, (category) => category.parent, {
+    cascade: true,
+  })
   subcategories: Category[];
 
-  @OneToMany(() => Product, (product) => product.category)
+  @OneToMany(() => Product, (product) => product.category, {
+    cascade: true,
+  })
   products: Product[];
 }
