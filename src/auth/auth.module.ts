@@ -6,11 +6,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { JWT_SECRET } from '../config';
 import { AuthController } from './auth.controller';
+import { CartsModule } from '../carts/carts.module';
 
 @Module({
   imports: [
     UsersModule,
     PassportModule,
+    CartsModule,
     JwtModule.register({
       secret: JWT_SECRET,
       signOptions: { expiresIn: '30d' },

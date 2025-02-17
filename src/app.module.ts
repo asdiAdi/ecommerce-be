@@ -1,4 +1,9 @@
-import { ClassSerializerInterceptor, Module } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
@@ -18,6 +23,7 @@ import { AddressesModule } from './addresses/addresses.module';
 import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
 import { CartsModule } from './carts/carts.module';
+import { CookieMiddleware } from './utils/midlewares/cookie.middleware';
 
 @Module({
   imports: [
@@ -38,7 +44,7 @@ import { CartsModule } from './carts/carts.module';
       username: PGUSER,
       password: PGPASSWORD,
       database: PGDATABASE,
-      synchronize: NODE_ENV === 'development',
+      // synchronize: NODE_ENV === 'development',
       autoLoadEntities: true,
     }),
     ThrottlerModule.forRoot([
@@ -60,4 +66,8 @@ import { CartsModule } from './carts/carts.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CookieMiddleware).forRoutes('*'); // Apply globally
+  }
+}

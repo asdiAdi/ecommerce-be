@@ -28,6 +28,6 @@ export const UserToken = createParamDecorator<keyof UserTokenDto | undefined>(
   (key, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
 
-    return key ? request.user[key] : request.user;
+    return key && request.user ? request.user[key] : request.user;
   },
 );

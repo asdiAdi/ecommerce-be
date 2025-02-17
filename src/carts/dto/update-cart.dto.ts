@@ -1,0 +1,13 @@
+import { OmitType } from '@nestjs/mapped-types';
+import { CartItemDataDto } from './cart-item-data.dto';
+import { IsEnum, IsOptional } from 'class-validator';
+
+enum Operation {
+  add = 'add',
+  subtract = 'subtract',
+}
+export class UpdateCartDto extends OmitType(CartItemDataDto, ['cart_id']) {
+  @IsEnum(Operation)
+  @IsOptional()
+  operation: Operation = Operation.add;
+}

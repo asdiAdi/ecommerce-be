@@ -35,6 +35,7 @@ export class AuthService {
 
     const { username, id } = await this.usersService.create(user);
     return {
+      id,
       access_token: this.jwtService.sign({ username, id }),
     };
   }
@@ -43,6 +44,7 @@ export class AuthService {
     const _user = await this.validateUser(user.username, user.password);
     const payload = { username: _user.username, id: _user.id };
     return {
+      id: _user.id,
       access_token: this.jwtService.sign(payload),
     };
   }

@@ -9,3 +9,5 @@ export const PGPORT = parseInt(process.env.PGPORT || '');
 export const PGUSER = process.env.PGUSER || '';
 export const PGPASSWORD = process.env.PGPASSWORD || '';
 export const PGDATABASE = process.env.PGDATABASE || '';
+
+export const COOKIE_SECRET = process.env.COOKIE_SECRET || undefined;

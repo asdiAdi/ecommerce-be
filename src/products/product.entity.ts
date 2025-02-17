@@ -6,6 +6,7 @@ import {
   PrimaryColumn,
   ManyToOne,
   Index,
+  JoinColumn,
 } from 'typeorm';
 import { Category } from '../categories/category.entity';
 
@@ -42,5 +43,6 @@ export class Product {
   updated_at: Date;
 
   @ManyToOne(() => Category, (category) => category.products)
+  @JoinColumn({ name: 'category_id' })
   category: Category;
 }

@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { Product } from '../products/product.entity';
 
@@ -28,6 +29,7 @@ export class Category {
     nullable: true,
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'category_id' })
   parent: Category;
 
   // One category can have multiple subcategories

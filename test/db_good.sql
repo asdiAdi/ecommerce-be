@@ -94,7 +94,7 @@ where length(title) = (select max(length(title)) from amazon)
 -- Orders and Cart
 CREATE TABLE carts (
     id uuid DEFAULT gen_random_uuid() primary key,
-    user_id uuid NOT NULL,
+    user_id uuid,
     created_at timestamptz,
     updated_at timestamptz,
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
@@ -102,12 +102,12 @@ CREATE TABLE carts (
 
 CREATE TABLE cart_items (
     cart_id uuid NOT NULL,
-    product_id uuid NOT NULL,
+    product_asin VARCHAR(10) NOT NULL,
     quantity INTEGER NOT NULL,
-    PRIMARY KEY (cart_id, product_id),
+    PRIMARY KEY (cart_id, product_asin),
     CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES carts(id) ON DELETE CASCADE,
-    CONSTRAINT fk_product_id FOREIGN KEY (product_id) REFERENCES products(asin) ON DELETE CASCADE
-    CONSTRAINT chk_quantity CHECK (quantity > 0) -- add checking on nest to delete the item when quantity is zero
+    CONSTRAINT fk_product_id FOREIGN KEY (product_asin) REFERENCES products(asin) ON DELETE CASCADE,
+    CONSTRAINT chk_quantity CHECK (quantity > 0) -- add checking on nest to throw an error when quantity is zero
 );
 
 -- one to many with users
