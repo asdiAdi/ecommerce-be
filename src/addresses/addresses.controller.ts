@@ -25,7 +25,7 @@ import { UpdateAddressDto } from './dto/update-address.dto';
 export class AddressesController {
   constructor(private readonly addressesService: AddressesService) {}
 
-  @Post('address')
+  @Post('address/create')
   async postAddress(
     @UserToken('id') id: string,
     @Body() createAddressDto: CreateAddressDto,

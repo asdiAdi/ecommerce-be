@@ -26,17 +26,17 @@ export class AddressesService {
     return await this.addressesRepository.findOneBy({ id });
   }
 
-  async findAllByUserId(id: string, addressQuery: AddressQueryDto) {
+  async findAllByUserId(id: string, addressQueryDto: AddressQueryDto) {
     const [data, count] = await this.addressesRepository.findAndCount({
-      where: { user_id: id, ...addressQuery.queries },
-      take: addressQuery.limit,
-      skip: addressQuery.skip,
+      where: { user_id: id, ...addressQueryDto.queries },
+      take: addressQueryDto.limit,
+      skip: addressQueryDto.skip,
       order: {
-        [addressQuery.order_by]: addressQuery.order,
+        [addressQueryDto.order_by]: addressQueryDto.order,
       },
     });
 
-    const meta = addressQuery.getMetadata(count);
+    const meta = addressQueryDto.getMetadata(count);
     return { data, meta };
   }
 

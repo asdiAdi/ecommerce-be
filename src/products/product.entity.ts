@@ -7,8 +7,11 @@ import {
   ManyToOne,
   Index,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { Category } from '../categories/category.entity';
+import { CartItem } from '../carts/cart-item.entity';
+import { Wishlist } from '../wishlists/wishlist.entity';
 
 @Entity({ name: 'products' })
 export class Product {
@@ -45,4 +48,14 @@ export class Product {
   @ManyToOne(() => Category, (category) => category.products)
   @JoinColumn({ name: 'category_id' })
   category: Category;
+
+  @OneToMany(() => CartItem, (cartItem) => cartItem.product_asin, {
+    cascade: true,
+  })
+  cart_items: CartItem[];
+
+  @OneToMany(() => Wishlist, (wishlist) => wishlist.product_asin, {
+    cascade: true,
+  })
+  wishlists: Wishlist[];
 }

@@ -8,11 +8,11 @@ import { UpdateCartDto } from './dto/update-cart.dto';
 import { PlainToInstance } from '../utils/interceptors/PlainToInstance.interceptor';
 import { CartDataDto } from './dto/cart-data.dto';
 
-@Controller()
+@Controller('cart')
 export class CartsController {
   constructor(private readonly cartsService: CartsService) {}
 
-  @Get('cart')
+  @Get()
   @UseGuards(JwtAuthGuardOptional)
   @PlainToInstance(CartDataDto)
   async getCart(
@@ -22,7 +22,7 @@ export class CartsController {
     return await this.cartsService.findCart(id, cart_id);
   }
 
-  @Post('cart/add-to-cart/')
+  @Post('/add-to-cart/')
   @UseGuards(JwtAuthGuardOptional)
   async addToCart(
     @Res() res: Response,

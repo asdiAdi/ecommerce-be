@@ -2,33 +2,32 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToMany,
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
   JoinColumn,
 } from 'typeorm';
 import { User } from '../users/user.entity';
-import { CartItem } from './cart-item.entity';
+import { Product } from '../products/product.entity';
 
-@Entity('carts')
-export class Cart {
+@Entity('wishlists')
+export class Wishlist {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ type: 'uuid', nullable: false, unique: true })
   user_id: string | null;
+  @Column({ type: 'varchar', length: '10', primary: true, nullable: false })
+  product_asin: string;
   @CreateDateColumn({ type: 'timestamptz' })
   created_at: Date;
   @UpdateDateColumn({ type: 'timestamptz' })
   updated_at: Date;
 
-  @ManyToOne(() => User, { onDelete: 'CASCADE', nullable: true })
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @OneToMany(() => CartItem, (cart_item) => cart_item.cart, {
-    cascade: true,
-    // eager: true, // will automatically load cart_item
-  })
-  cart_items: CartItem[];
+  @ManyToOne(() => Product, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'product_asin' })
+  product: Product;
 }

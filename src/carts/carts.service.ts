@@ -22,12 +22,12 @@ export class CartsService {
     if (userId) {
       cart = await this.cartRepository.findOne({
         where: { user_id: userId },
-        relations: ['cart_items'],
+        relations: ['cart_items', 'cart_items.product'],
       });
     } else if (cartId) {
       cart = await this.cartRepository.findOne({
         where: { id: cartId },
-        relations: ['cart_items'],
+        relations: ['cart_items', 'cart_items.product'],
       });
     }
 
