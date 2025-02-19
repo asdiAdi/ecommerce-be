@@ -24,4 +24,8 @@ export class ProductsService {
     const meta = productQuery.getMetadata(count);
     return { data, meta };
   }
+
+  async findByAsin(asin: string) {
+    return await this.productRepository.findOneBy({ asin: asin });
+  }
 }

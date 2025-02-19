@@ -104,6 +104,8 @@ CREATE TABLE cart_items (
     cart_id uuid NOT NULL,
     product_asin VARCHAR(10) UNIQUE NOT NULL,
     quantity INTEGER NOT NULL,
+    created_at timestamptz,
+    updated_at timestamptz,
     PRIMARY KEY (cart_id, product_asin),
     CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES carts(id) ON DELETE CASCADE,
     CONSTRAINT fk_product_asin FOREIGN KEY (product_asin) REFERENCES products(asin) ON DELETE CASCADE,

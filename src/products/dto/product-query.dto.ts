@@ -6,6 +6,10 @@ import { Product } from '../product.entity';
 
 enum ProductOrderBy {
   title = 'title',
+  stars = 'stars',
+  reviews = 'reviews',
+  price = 'price',
+  stock = 'stock',
 }
 
 export class ProductQueryDto extends MetaQueryDto {

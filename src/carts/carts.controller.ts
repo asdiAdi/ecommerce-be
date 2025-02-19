@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { CartsService } from './carts.service';
 import { UserToken } from '../utils/decorators/UserToken.decorator';
 import { JwtAuthGuardOptional } from '../auth/jwt-auth-optional.guard';
@@ -7,6 +15,7 @@ import { Response } from 'express';
 import { UpdateCartDto } from './dto/update-cart.dto';
 import { PlainToInstance } from '../utils/interceptors/PlainToInstance.interceptor';
 import { CartDataDto } from './dto/cart-data.dto';
+import { CartQueryDto } from './dto/cart-query.dto';
 
 @Controller('cart')
 export class CartsController {
@@ -17,16 +26,10 @@ export class CartsController {
   @PlainToInstance(CartDataDto)
   async getCart(
     @Cookie('cart_id') cart_id: string,
+    @Query() query: CartQueryDto,
     @UserToken('id') id?: string,
   ) {
-    return (await this.cartsService.findCart(id, cart_id)) ?? [];
-
-    // return (
-    //   cart ?? {
-    //     data: [],
-    //     meta: new MetaQueryDto(),
-    //   }
-    // );
+    return await this.cartsService.findCartItems(query, id, cart_id);
   }
 
   @Post('/add-to-cart/')

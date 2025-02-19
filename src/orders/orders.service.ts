@@ -67,8 +67,8 @@ export class OrdersService {
       order = queryRunner.manager.create(Order, order);
       await queryRunner.manager.save(order);
 
-      // save all cart items
       for (const cartItem of cart.cart_items) {
+        // save all cart items
         let orderItem = queryRunner.manager.create(OrderItem, {
           order_id: order.id,
           product_asin: cartItem.product_asin,
@@ -77,12 +77,14 @@ export class OrdersService {
         });
 
         await queryRunner.manager.save(OrderItem, orderItem);
+
+        // TODO: reduce product stock
       }
 
       // delete cart
-      // await this.cartsService.deleteCart(userId, cart.id);
-      await queryRunner.commitTransaction();
+      await this.cartsService.deleteCart(userId, cart.id);
 
+      await queryRunner.commitTransaction();
       // return updated order
       return this.findOrderById(userId, order.id);
     } catch (error) {

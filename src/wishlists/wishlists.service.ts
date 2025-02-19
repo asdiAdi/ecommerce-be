@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Wishlist } from './wishlist.entity';
 import { WishlistQueryDto } from './dto/wishlist-query.dto';
@@ -19,7 +19,11 @@ export class WishlistsService {
       user_id: userId,
     };
 
-    await this.wishlistRepository.save(payload);
+    try {
+      await this.wishlistRepository.save(payload);
+    } catch (error) {
+      throw new ForbiddenException('Error creating wishlist');
+    }
   }
 
   async findOneById(id: string) {
@@ -42,6 +46,11 @@ export class WishlistsService {
   }
 
   async deleteById(userId: string, id: string) {
-    return await this.wishlistRepository.delete({ user_id: userId, id: id });
+    const { affected } = await this.wishlistRepository.delete({
+      user_id: userId,
+      id: id,
+    });
+    if (affected) return true;
+    else throw new ForbiddenException('Product not found');
   }
 }
