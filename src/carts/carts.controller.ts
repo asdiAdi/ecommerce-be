@@ -19,7 +19,14 @@ export class CartsController {
     @Cookie('cart_id') cart_id: string,
     @UserToken('id') id?: string,
   ) {
-    return await this.cartsService.findCart(id, cart_id);
+    return (await this.cartsService.findCart(id, cart_id)) ?? [];
+
+    // return (
+    //   cart ?? {
+    //     data: [],
+    //     meta: new MetaQueryDto(),
+    //   }
+    // );
   }
 
   @Post('/add-to-cart/')

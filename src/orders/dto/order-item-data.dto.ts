@@ -2,11 +2,11 @@ import { IsNotEmpty, IsNumber, IsString, IsUUID, Min } from 'class-validator';
 import { Exclude, Type } from 'class-transformer';
 import { ProductDataDto } from '../../products/dto/product-data.dto';
 
-export class CartItemDataDto {
+export class OrderItemDataDto {
   @Exclude()
   @IsNotEmpty()
   @IsUUID()
-  cart_id: string;
+  order_id: string;
 
   @IsNotEmpty()
   @IsString()

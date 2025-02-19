@@ -93,7 +93,7 @@ where length(title) = (select max(length(title)) from amazon)
 
 -- Orders and Cart
 CREATE TABLE carts (
-    id uuid DEFAULT gen_random_uuid() primary key,
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id  uuid UNIQUE,
     created_at timestamptz,
     updated_at timestamptz,
@@ -112,7 +112,7 @@ CREATE TABLE cart_items (
 
 
 CREATE TABLE wishlists (
-    id uuid DEFAULT gen_random_uuid() primary key,
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id uuid,
     product_asin VARCHAR(10) UNIQUE NOT NULL,
     created_at timestamptz,
@@ -123,21 +123,22 @@ CREATE TABLE wishlists (
 
 -- one to many with users
 CREATE TABLE orders (
-    id uuid DEFAULT gen_random_uuid() primary key,
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id uuid NOT NULL,
-    total_amount DECIMAL(10,2) NOT NULL CHECK (total_amount >= 0),
-    status VARCHAR(50) DEFAULT 'pending',
-    order_date timestamptz,
+    total_price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    status VARCHAR(50) NOT NULL DEFAULT 'pending',
     created_at timestamptz, -- also means order_date
     updated_at timestamptz,
-    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-)
+    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
 
-CREATE TABLE orders (
-    order_id SERIAL PRIMARY KEY,
-    customer_id INT NOT NULL,
-    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    total_amount DECIMAL(10,2) NOT NULL CHECK (total_amount >= 0),
-    status VARCHAR(50) DEFAULT 'pending',
-    CONSTRAINT fk_customer FOREIGN KEY (customer_id) REFERENCES customers(customer_id) ON DELETE CASCADE
+CREATE TABLE order_items (
+    order_id uuid NOT NULL,
+    product_asin VARCHAR(10) NOT NULL,
+    quantity INT NOT NULL,
+    price DECIMAL(10,2) NOT NULL, -- Price at the time of purchase
+    PRIMARY KEY (order_id, product_asin),
+    CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    CONSTRAINT fk_product_asin FOREIGN KEY (product_asin) REFERENCES products(asin) ON DELETE CASCADE,
+    CONSTRAINT chk_quantity CHECK (quantity > 0)
 );

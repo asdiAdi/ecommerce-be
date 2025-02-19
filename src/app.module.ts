@@ -25,6 +25,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { CartsModule } from './carts/carts.module';
 import { CookieMiddleware } from './utils/midlewares/cookie.middleware';
 import { WishlistsModule } from './wishlists/wishlists.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { WishlistsModule } from './wishlists/wishlists.module';
     CategoriesModule,
     CartsModule,
     WishlistsModule,
+    OrdersModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
       isGlobal: true,

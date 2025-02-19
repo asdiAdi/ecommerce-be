@@ -9,6 +9,7 @@ import {
 import { Address } from '../addresses/address.entity';
 import { Cart } from '../carts/cart.entity';
 import { Wishlist } from '../wishlists/wishlist.entity';
+import { Order } from '../orders/order.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -47,4 +48,9 @@ export class User {
     cascade: true,
   })
   wishlists: Wishlist[];
+
+  @OneToMany(() => Order, (order) => order.user, {
+    cascade: true,
+  })
+  orders: Order[];
 }

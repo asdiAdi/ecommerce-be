@@ -1,8 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Cart } from './cart.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
-import { CartItemDataDto } from './dto/cart-item-data.dto';
+import { DataSource, FindOneOptions, Repository } from 'typeorm';
 import { CartItem } from './cart-item.entity';
 import { UpdateCartDto } from './dto/update-cart.dto';
 
@@ -16,18 +15,24 @@ export class CartsService {
     private cartItemRepository: Repository<CartItem>,
   ) {}
 
-  async findCart(userId?: string, cartId?: string) {
+  async findCart(
+    userId?: string,
+    cartId?: string,
+    options?: FindOneOptions<Cart>,
+  ) {
     let cart: Cart | null = null;
 
     if (userId) {
       cart = await this.cartRepository.findOne({
         where: { user_id: userId },
         relations: ['cart_items', 'cart_items.product'],
+        ...(options ? { ...options } : {}),
       });
     } else if (cartId) {
       cart = await this.cartRepository.findOne({
         where: { id: cartId },
         relations: ['cart_items', 'cart_items.product'],
+        ...(options ? { ...options } : {}),
       });
     }
 
@@ -41,7 +46,9 @@ export class CartsService {
     await queryRunner.startTransaction();
 
     try {
-      let cart = await this.findCart(userId, cartId);
+      let cart = await this.findCart(userId, cartId, {
+        relations: ['cart_items'],
+      });
 
       // make a cart if none existed with 0 items
       if (!cart) {
@@ -110,5 +117,9 @@ export class CartsService {
 
   async mergeGuestToUserCart(userId: string, cartId: string) {
     // TODO: merge cart data to user when user logged in
+  }
+
+  async deleteCart(userId: string, cartId: string) {
+    return await this.cartRepository.delete({ user_id: userId, id: cartId });
   }
 }

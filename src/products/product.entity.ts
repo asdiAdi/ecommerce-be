@@ -12,6 +12,7 @@ import {
 import { Category } from '../categories/category.entity';
 import { CartItem } from '../carts/cart-item.entity';
 import { Wishlist } from '../wishlists/wishlist.entity';
+import { OrderItem } from '../orders/order-item.entity';
 
 @Entity({ name: 'products' })
 export class Product {
@@ -58,4 +59,9 @@ export class Product {
     cascade: true,
   })
   wishlists: Wishlist[];
+
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.product_asin, {
+    cascade: true,
+  })
+  order_items: OrderItem[];
 }

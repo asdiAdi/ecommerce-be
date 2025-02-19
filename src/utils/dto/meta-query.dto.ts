@@ -1,5 +1,4 @@
-import { Type } from 'class-transformer';
-import { IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, Max, Min } from 'class-validator';
 import { Order, OrderBy } from '../../config/enums';
 
 export class MetaQueryDto {
@@ -11,13 +10,11 @@ export class MetaQueryDto {
   @IsEnum(OrderBy)
   readonly order_by: string = OrderBy.created_at;
 
-  @Type(() => Number)
   @IsInt()
   @Min(0)
   @IsOptional()
   readonly offset: number = 0;
 
-  @Type(() => Number)
   @IsInt()
   @Min(1)
   @Max(500)

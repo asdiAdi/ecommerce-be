@@ -1,5 +1,6 @@
 import { IsDate, IsNotEmpty, IsUUID } from 'class-validator';
-import { Exclude } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
+import { CartItemDataDto } from './cart-item-data.dto';
 
 export class CartDataDto {
   @IsNotEmpty()
@@ -15,4 +16,7 @@ export class CartDataDto {
   @Exclude()
   @IsDate()
   updated_at: Date;
+
+  @Type(() => CartItemDataDto)
+  cart_items: CartItemDataDto[];
 }

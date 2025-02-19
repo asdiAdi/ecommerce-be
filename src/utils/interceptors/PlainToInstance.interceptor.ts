@@ -20,6 +20,7 @@ export class PlainToInstanceInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((data: Object) => {
         if (
+          !!data &&
           data.hasOwnProperty('data') &&
           'data' in data &&
           data.hasOwnProperty('meta') &&
