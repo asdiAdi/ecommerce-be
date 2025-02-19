@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Query } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { PlainToInstance } from '../utils/interceptors/PlainToInstance.interceptor';
 import { ProductDataDto } from './dto/product-data.dto';
@@ -13,5 +13,10 @@ export class ProductsController {
   @Get()
   async getAllProducts(@Query() productQueryDto: ProductQueryDto) {
     return await this.productsService.findAll(productQueryDto);
+  }
+
+  @Get('/:asin')
+  async getProduct(@Param('asin') asin: string) {
+    return await this.productsService.findByAsin(asin);
   }
 }

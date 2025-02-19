@@ -4,6 +4,8 @@ import { Order } from './order.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrderItem } from './order-item.entity';
 import { CartsService } from '../carts/carts.service';
+import { ProductsService } from '../products/products.service';
+import { reduce } from 'rxjs';
 
 @Injectable()
 export class OrdersService {
@@ -15,6 +17,7 @@ export class OrdersService {
     private readonly orderItemRepository: Repository<OrderItem>,
 
     private readonly cartsService: CartsService,
+    private readonly productsService: ProductsService,
   ) {}
 
   async findOrderById(
@@ -78,7 +81,11 @@ export class OrdersService {
 
         await queryRunner.manager.save(OrderItem, orderItem);
 
-        // TODO: reduce product stock
+        //   reduce stock
+        await this.productsService.reduceStock(
+          cartItem.product_asin,
+          cartItem.quantity,
+        );
       }
 
       // delete cart
