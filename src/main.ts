@@ -13,6 +13,7 @@ import { COOKIE_SECRET } from './config';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.use(cookieParser(COOKIE_SECRET));
+  app.enableCors();
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -26,6 +27,6 @@ async function bootstrap() {
       },
     }),
   );
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 4000);
 }
 void bootstrap();

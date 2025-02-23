@@ -50,7 +50,7 @@ import { OrdersModule } from './orders/orders.module';
       database: PGDATABASE,
       // synchronize: NODE_ENV === 'development',
       autoLoadEntities: true,
-      logging: true,
+      logging: false,
     }),
     ThrottlerModule.forRoot([
       {

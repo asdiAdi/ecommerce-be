@@ -9,7 +9,9 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { Exclude } from 'class-transformer';
+import { Exclude, Transform, Type } from 'class-transformer';
+import { Category } from '../../categories/category.entity';
+import { Product } from '../product.entity';
 
 export class ProductDataDto {
   @IsString()
@@ -56,8 +58,18 @@ export class ProductDataDto {
   @IsOptional()
   bought_in_last_month?: number;
 
+  @Exclude()
   @IsUUID()
   category_id: string;
+
+  // @Exclude()
+  category: Category;
+
+  @Type(() => Category)
+  @Transform(({ value }: { value: Category }) => value.name, {
+    toClassOnly: true,
+  })
+  category_name: string;
 
   @Exclude()
   @IsDate()

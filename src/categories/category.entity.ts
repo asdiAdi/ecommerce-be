@@ -29,7 +29,7 @@ export class Category {
     nullable: true,
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'category_id' })
+  @JoinColumn({ name: 'id' })
   parent: Category;
 
   // One category can have multiple subcategories

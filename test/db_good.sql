@@ -37,7 +37,7 @@ CREATE TABLE categories (
     name VARCHAR(255) UNIQUE NOT NULL,
     created_at timestamptz default current_timestamp,
     updated_at timestamptz default current_timestamp
-)
+);
 
 -- create product table on the arrangement you want
 CREATE TABLE products (
@@ -63,13 +63,13 @@ CREATE TABLE products (
 
 -- generate random values on stock
 UPDATE products
-SET stock = FLOOR(RANDOM() * 101); -- random 0 to 100
+SET stock = FLOOR(RANDOM() * 101) -- random 0 to 100
 WHERE stock IS NULL;
 
 -- generate categories, also preventing duplicates
 INSERT INTO categories(name)
 SELECT DISTINCT category_name from products
-WHERE category_name NOT IN (SELECT name from categories)
+WHERE category_name NOT IN (SELECT name from categories);
 
 -- set the category_id into products by comparing the name from categories
 UPDATE products p
@@ -87,8 +87,8 @@ ALTER TABLE categories ALTER created_at DROP default;
 ALTER TABLE categories ALTER updated_at DROP default;
 
 -- display max length and their value
-SELECT title, length(title) as name_length from amazon
-where length(title) = (select max(length(title)) from amazon)
+SELECT title, length(title) AS name_length FROM products
+WHERE length(title) = (SELECT max(length(title)) FROM products);
 
 
 -- Orders and Cart

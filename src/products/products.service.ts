@@ -7,6 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './product.entity';
 import { In, Repository } from 'typeorm';
 import { ProductQueryDto } from './dto/product-query.dto';
+import { plainToInstance } from 'class-transformer';
+import { ProductDataDto } from './dto/product-data.dto';
 
 @Injectable()
 export class ProductsService {
@@ -28,6 +30,7 @@ export class ProductsService {
       where: productQuery.queries,
       take: productQuery.limit,
       skip: productQuery.skip,
+      relations: ['category'],
       order: {
         [productQuery.order_by]: productQuery.order,
       },
