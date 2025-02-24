@@ -16,6 +16,7 @@ import { WishlistDataDto } from './dto/wishlist-data.dto';
 import { UserToken } from '../utils/decorators/UserToken.decorator';
 import { WishlistQueryDto } from './dto/wishlist-query.dto';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
+import { ProductDataDto } from '../products/dto/product-data.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('wishlist')
@@ -33,6 +34,7 @@ export class WishlistsController {
   }
 
   @Get()
+  @PlainToInstance(ProductDataDto)
   async getWishlist(
     @UserToken('id') userId: string,
     @Query() query: WishlistQueryDto,

@@ -12,6 +12,7 @@ import {
 import { Exclude, Transform, Type } from 'class-transformer';
 import { Category } from '../../categories/category.entity';
 import { Product } from '../product.entity';
+import { CategoryDataDto } from '../../categories/dto/category-data.dto';
 
 export class ProductDataDto {
   @IsString()
@@ -63,13 +64,8 @@ export class ProductDataDto {
   category_id: string;
 
   // @Exclude()
-  category: Category;
-
-  @Type(() => Category)
-  @Transform(({ value }: { value: Category }) => value.name, {
-    toClassOnly: true,
-  })
-  category_name: string;
+  @Type(() => CategoryDataDto)
+  category: CategoryDataDto;
 
   @Exclude()
   @IsDate()

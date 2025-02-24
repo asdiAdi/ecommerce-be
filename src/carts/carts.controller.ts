@@ -14,8 +14,8 @@ import { Cookie } from '../utils/decorators/Cookie.decorator';
 import { Response } from 'express';
 import { UpdateCartDto } from './dto/update-cart.dto';
 import { PlainToInstance } from '../utils/interceptors/PlainToInstance.interceptor';
-import { CartDataDto } from './dto/cart-data.dto';
 import { CartQueryDto } from './dto/cart-query.dto';
+import { CartItemDataDto } from './dto/cart-item-data.dto';
 
 @Controller('cart')
 export class CartsController {
@@ -23,7 +23,7 @@ export class CartsController {
 
   @Get()
   @UseGuards(JwtAuthGuardOptional)
-  @PlainToInstance(CartDataDto)
+  @PlainToInstance(CartItemDataDto)
   async getCart(
     @Cookie('cart_id') cart_id: string,
     @Query() query: CartQueryDto,

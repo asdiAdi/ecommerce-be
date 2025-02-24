@@ -42,7 +42,7 @@ export class WishlistsService {
     });
 
     const meta = wishlistQueryDto.getMetadata(count);
-    return { data, meta };
+    return { data: data.map((wishlist) => wishlist.product), meta };
   }
 
   async deleteById(userId: string, id: string) {

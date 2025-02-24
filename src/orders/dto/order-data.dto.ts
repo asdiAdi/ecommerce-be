@@ -7,6 +7,7 @@ import {
   MaxLength,
 } from 'class-validator';
 import { Exclude, Type } from 'class-transformer';
+import { OrderItemDataDto } from './order-item-data.dto';
 
 export class OrderDataDto {
   @IsNotEmpty()
@@ -29,4 +30,7 @@ export class OrderDataDto {
   @Exclude()
   @IsDate()
   updated_at: Date;
+
+  @Type(() => OrderItemDataDto)
+  order_items: OrderItemDataDto[];
 }

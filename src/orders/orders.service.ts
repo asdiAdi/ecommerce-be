@@ -6,6 +6,7 @@ import { OrderItem } from './order-item.entity';
 import { CartsService } from '../carts/carts.service';
 import { ProductsService } from '../products/products.service';
 import { reduce } from 'rxjs';
+import { OrderQueryDto } from './dto/order-query.dto';
 
 @Injectable()
 export class OrdersService {
@@ -30,15 +31,24 @@ export class OrdersService {
         id: orderId,
         user_id: userId,
       },
+      relations: ['order_items'],
       ...(options ? { ...options } : {}),
     });
   }
 
-  async findAllOrdersByUserId(userId: string) {
-    return await this.orderRepository.find({
+  async findAllOrdersByUserId(userId: string, orderQueryDto: OrderQueryDto) {
+    const [data, count] = await this.orderRepository.findAndCount({
       where: { user_id: userId },
+      take: orderQueryDto.limit,
+      skip: orderQueryDto.skip,
+      order: {
+        [orderQueryDto.order_by]: orderQueryDto.order,
+      },
       relations: ['order_items'],
     });
+
+    const meta = orderQueryDto.getMetadata(count);
+    return { data, meta };
   }
 
   // async createOrderItem(orderId: string) {
