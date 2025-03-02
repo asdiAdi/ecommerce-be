@@ -34,6 +34,10 @@ export class AddressesController {
     return true;
   }
 
+  @Get('address/:addressId')
+  async getAddress(@Param('addressId') addressId: string) {
+    return await this.addressesService.findOneById(addressId);
+  }
   @Get('addresses')
   async getAddresses(
     @UserToken('id') id: string,

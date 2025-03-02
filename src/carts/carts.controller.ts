@@ -32,7 +32,7 @@ export class CartsController {
     return await this.cartsService.findCartItems(query, id, cart_id);
   }
 
-  @Post('/add-to-cart/')
+  @Post()
   @UseGuards(JwtAuthGuardOptional)
   async addToCart(
     @Res() res: Response,

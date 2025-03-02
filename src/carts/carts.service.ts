@@ -7,9 +7,8 @@ import { Cart } from './cart.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, FindOneOptions, Repository } from 'typeorm';
 import { CartItem } from './cart-item.entity';
-import { UpdateCartDto } from './dto/update-cart.dto';
+import { Operation, UpdateCartDto } from './dto/update-cart.dto';
 import { ProductsService } from '../products/products.service';
-import { Product } from '../products/product.entity';
 import { CartQueryDto } from './dto/cart-query.dto';
 
 @Injectable()
@@ -84,13 +83,17 @@ export class CartsService {
     await queryRunner.startTransaction();
 
     try {
-      let cart = await this.findCart(userId, cartId);
+      let cart = await this.findCart(userId, cartId, {
+        relations: ['cart_items', 'cart_items.product'],
+      });
+      let cartItemTobeDeleted: CartItem | null = null;
 
       // make a cart if none existed with 0 items
       if (!cart) {
         // you can only subtract an item if cart exists
         // cart should always exist when cartId is known
-        if (operation === 'subtract' || cartId) throw new ForbiddenException();
+        if (operation === Operation.subtract || cartId)
+          throw new ForbiddenException();
 
         cart = queryRunner.manager.create(Cart, {
           cart_items: [],
@@ -101,11 +104,11 @@ export class CartsService {
       }
 
       // find if product id already exist on the cart
-      let cartItem = cart.cart_items.find(
+      const cartItem = cart.cart_items.find(
         (ci) => ci.product_asin === product_asin,
       );
 
-      if (operation === 'add') {
+      if (operation === Operation.add) {
         if (cartItem) {
           // add to existing
           const total = cartItem.quantity + quantity;
@@ -128,7 +131,7 @@ export class CartsService {
             throw new ForbiddenException('Exceeded stock');
 
           // explicit add
-          await queryRunner.manager.save(CartItem, newCartItem);
+          // await queryRunner.manager.save(CartItem, newCartItem);
           cart.cart_items.push(newCartItem);
         }
       } else {
@@ -138,14 +141,10 @@ export class CartsService {
           // subtract if result is still greater than zero
           cartItem.quantity -= quantity;
         } else {
-          // filter out the item if it exceeds the limit
-          await queryRunner.manager.delete(CartItem, {
-            cart_id: cartId,
+          cartItemTobeDeleted = queryRunner.manager.create(CartItem, {
+            cart_id: cart.id,
             product_asin: product_asin,
-          }); //explicit delete
-          cart.cart_items = cart.cart_items.filter(
-            (cart_item) => cart_item.product_asin !== product_asin,
-          );
+          });
         }
       }
 
@@ -159,6 +158,10 @@ export class CartsService {
             ...val,
           })),
         });
+
+        if (cartItemTobeDeleted !== null) {
+          await queryRunner.manager.delete(CartItem, cartItemTobeDeleted);
+        }
       } else {
         // delete cart if there are 0 cartItems left
         await queryRunner.manager.delete(Cart, { id: cart.id });

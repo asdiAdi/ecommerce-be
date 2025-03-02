@@ -53,4 +53,13 @@ export class WishlistsService {
     if (affected) return true;
     else throw new ForbiddenException('Product not found');
   }
+
+  async deleteItemByAsin(userId: string, id: string) {
+    const { affected } = await this.wishlistRepository.delete({
+      user_id: userId,
+      product_asin: id,
+    });
+    if (affected) return true;
+    else throw new ForbiddenException('Product not found');
+  }
 }

@@ -50,4 +50,13 @@ export class WishlistsController {
     await this.wishlistService.deleteById(userId, id);
     return true;
   }
+
+  @Delete('/product/:asin')
+  async deleteWishlistItem(
+    @UserToken('id') userId: string,
+    @Param('asin') asin: string,
+  ) {
+    await this.wishlistService.deleteItemByAsin(userId, asin);
+    return true;
+  }
 }

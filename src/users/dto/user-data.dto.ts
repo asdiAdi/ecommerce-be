@@ -33,7 +33,12 @@ export class UserDataDto {
   @Expose()
   @IsOptional()
   @MaxLength(255)
-  name?: string;
+  first_name?: string;
+
+  @Expose()
+  @IsOptional()
+  @MaxLength(255)
+  last_name?: string;
 
   @Expose()
   @IsOptional()
@@ -48,7 +53,6 @@ export class UserDataDto {
 
   @Expose()
   @IsOptional()
-  @IsDateString()
   birthdate?: string;
 
   @IsDate()

@@ -55,7 +55,7 @@ import { OrdersModule } from './orders/orders.module';
     ThrottlerModule.forRoot([
       {
         ttl: 60000,
-        limit: 20,
+        limit: 1000,
       },
     ]),
   ],

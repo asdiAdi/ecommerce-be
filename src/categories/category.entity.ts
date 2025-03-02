@@ -16,7 +16,7 @@ export class Category {
   @PrimaryGeneratedColumn('uuid')
   id: string;
   @Column({ type: 'uuid', nullable: true, unique: true })
-  parent_id: string;
+  parent_id: string | null;
   @Column({ type: 'varchar', length: 255, nullable: false })
   name: string;
   @CreateDateColumn({ type: 'timestamptz' })
@@ -29,7 +29,7 @@ export class Category {
     nullable: true,
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'id' })
+  @JoinColumn({ name: 'parent_id' })
   parent: Category;
 
   // One category can have multiple subcategories

@@ -2,7 +2,7 @@ import { OmitType } from '@nestjs/mapped-types';
 import { CartItemDataDto } from './cart-item-data.dto';
 import { IsEnum, IsOptional } from 'class-validator';
 
-enum Operation {
+export enum Operation {
   add = 'add',
   subtract = 'subtract',
 }

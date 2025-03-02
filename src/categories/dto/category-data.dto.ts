@@ -1,12 +1,13 @@
 import { IsDate, IsString, IsUUID } from 'class-validator';
-import { Exclude } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
 
 export class CategoryDataDto {
   @IsUUID()
   id: string;
 
+  @Exclude()
   @IsString()
-  parent_id: string;
+  parent_id: string | null;
 
   @IsString()
   name: string;
@@ -18,4 +19,7 @@ export class CategoryDataDto {
   @Exclude()
   @IsDate()
   updated_at: Date;
+
+  @Type(() => CategoryDataDto)
+  subcategories: CategoryDataDto[];
 }

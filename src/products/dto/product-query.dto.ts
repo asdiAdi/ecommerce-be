@@ -17,6 +17,10 @@ export class ProductQueryDto extends MetaQueryDto {
   @IsOptional()
   search: string;
 
+  @IsString()
+  @IsOptional()
+  category_name: string;
+
   @IsEnum({ ...OrderBy, ...ProductOrderBy })
   order_by: OrderBy | ProductOrderBy;
 
@@ -25,6 +29,7 @@ export class ProductQueryDto extends MetaQueryDto {
   get queries(): FindOptionsWhere<Product> {
     return {
       ...(this.search && { title: ILike(`%${this.search}%`) }),
+      ...(this.category_name && { category: { name: this.category_name } }),
     };
   }
 }

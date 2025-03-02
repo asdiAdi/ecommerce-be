@@ -22,7 +22,9 @@ export class User {
   @Column({ type: 'varchar', length: 255, nullable: true })
   avatar: string;
   @Column({ type: 'varchar', length: 255, nullable: true })
-  name: string;
+  first_name: string;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  last_name: string;
   @Column({ type: 'varchar', length: 255, unique: true, nullable: true })
   email: string;
   @Column({ type: 'varchar', length: 255, nullable: true })
